@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ru" data-style="win11" data-mode="system">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmzLink</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="fx.css">
+</head>
+<body oncontextmenu="return false">
+<div id="app" class="launching">
+  <div class="bg-deco" aria-hidden="true"></div>
+
+  <header class="titlebar" data-tauri-drag-region>
+    <div class="brand" id="titleBrand" data-tauri-drag-region>
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M13.3 8.7H4.6V23.3H13.3M18.7 8.7H27.4V23.3H18.7M13.3 8.7L18.7 23.3M13.3 23.3L18.7 8.7" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span class="brand-name dt" data-p="2" data-t="EmzLink" data-tauri-drag-region>EmzLink</span>
+    </div>
+    <div class="win-btns">
+      <button class="wb" id="btnMin" title="Свернуть" aria-label="Свернуть"><svg viewBox="0 0 24 24"><path d="M5 12h14" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="wb" id="btnMax" title="Во весь экран" aria-label="Во весь экран"><svg viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="1.5" fill="none" stroke-width="2"/></svg></button>
+      <button class="wb close" id="btnClose" title="В трей" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="nav" id="nav">
+      <button class="nav-item on" data-view="home"><svg viewBox="0 0 24 24"><path d="M12 3v8.5" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M6.6 6.8a7.5 7.5 0 1 0 10.8 0" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg><span>Главная</span></button>
+      <button class="nav-item" data-view="lists"><svg viewBox="0 0 24 24"><path d="M4 7l1.8 1.8L9 5.5M4 17l1.8 1.8L9 15.5M12 7h8M12 17h8M12 12h8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span>Сайты</span></button>
+      <button class="nav-item" data-view="anti-input" id="navOpt" hidden><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span>Оптимизация</span><span class="beta-badge">BETA</span></button>
+      <button class="nav-item" data-view="zapret"><svg viewBox="0 0 24 24"><path d="M5 6h8M17 6h2M5 12h2M11 12h8M5 18h10M19 18h0" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="15" cy="6" r="2" stroke-width="2" fill="none"/><circle cx="9" cy="12" r="2" stroke-width="2" fill="none"/><circle cx="17" cy="18" r="2" stroke-width="2" fill="none"/></svg><span>Zapret</span></button>
+      <button class="nav-item" data-view="tg"><svg viewBox="0 0 24 24"><path d="M21 4 3 11l5.5 2L10 19l3-3.5 4.5 3.5L21 4Z" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="m8.5 13 8-6" stroke-width="2" stroke-linecap="round" fill="none"/></svg><span>Telegram</span></button>
+      <button class="nav-item" data-view="settings"><svg viewBox="0 0 24 24"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span>Темы и настройки</span></button>
+      <div class="nav-foot"><span class="led" id="navLed"></span><span id="navStatus">Выключено</span></div>
+    </nav>
+
+    <main class="content">
+
+      <!-- HOME -->
+      <section class="view on" id="v-home">
+        <div class="home alts-collapsed" id="homeGrid">
+          <div class="hero">
+            <div class="power-wrap" id="powerWrap" data-state="off">
+              <div class="power-burst" id="powerBurst" aria-hidden="true"></div>
+              <svg class="ring" viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="122"/></svg>
+              <button class="power" id="btnPower" aria-label="Включить или выключить обход">
+                <svg viewBox="0 0 24 24" class="power-ico"><path d="M12 3v9" stroke-width="2.4" stroke-linecap="round"/><path d="M6.3 6.6a8 8 0 1 0 11.4 0" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>
+              </button>
+            </div>
+            <h1 class="status dt" id="statusTitle" data-p="4" data-t="Выключено">Выключено</h1>
+            <div class="cur-chip" id="curChip" role="button" tabindex="0">
+              <span class="sdot good" id="curDot"></span>
+              <span id="curName">ALT 1</span>
+              <span class="cur-ping" id="curPing">22 мс</span>
+            </div>
+          </div>
+
+          <div class="panel" id="altsPanel">
+            <!-- Стрелочка и кнопка режимов обхода: без обводки, в 3 строки -->
+            <button class="edge-alts-toggle" id="btnToggleAlts" aria-expanded="false">
+              <svg viewBox="0 0 24 24" class="edge-arrow-ico" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="edge-toggle-lines" id="altsToggleLabel">
+                <span>Режимы</span>
+                <span>обхода</span>
+              </div>
+            </button>
+
+            <div class="panel-head">
+              <h2>Режимы</h2>
+              <div class="panel-actions">
+                <span class="prog-text" id="progText"></span>
+                <button class="btn" id="btnTestAll" title="Измерить пинг всех режимов">Все</button>
+                <button class="btn primary" id="btnTest" title="Найти рабочий режим автоматически">Автоподбор</button>
+                <button class="btn-close-alts" id="btnCloseAlts" title="Свернуть режимы обхода">
+                  <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="prog" id="prog" hidden><i id="progBar"></i></div>
+            <div class="mode-scroll" id="modeList"></div>
+          </div>
+        </div>
+
+        <div class="missing card" id="missingCard" hidden>
+          <div class="mcol"><h2>zapret не найден</h2><p class="mtext" id="missingText"></p></div>
+          <div class="row-btns">
+            <button class="btn primary" id="btnInstall">Скачать</button>
+            <button class="btn" id="btnChoose1">Выбрать папку</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LISTS -->
+      <section class="view" id="v-lists">
+        <div class="view-head"><h1 class="dt" data-p="3" data-t="Сайты">Сайты</h1></div>
+        <div class="scroll">
+          <h3 class="group">Основные</h3>
+          <div class="card" id="listMain"></div>
+
+          <h3 class="group">Другие сайты <span class="beta-badge">BETA</span></h3>
+          <div class="card" id="secBetaSites">
+            <div id="listExp"></div>
+          </div>
+
+          <h3 class="group">Свои сайты</h3>
+          <div class="card">
+            <div class="add-row">
+              <input class="input" id="domIn" placeholder="example.com" spellcheck="false" autocomplete="off">
+              <button class="btn primary" id="domAdd">Добавить</button>
+            </div>
+            <div class="chips" id="domChips"></div>
+          </div>
+                          </div>
+      </section>
+
+      <!-- OPTIMIZATION -->
+      <section class="view" id="v-anti-input">
+        <div class="view-head">
+          <h1 class="dt" data-p="3" data-t="Оптимизация">Оптимизация</h1>
+          <span class="beta-badge lg">BETA</span>
+        </div>
+        <div class="scroll">
+          <div class="card" style="margin-bottom: 12px;">
+            <label class="switch-row">
+              <div class="sw-text">
+                <b>Включить оптимизацию</b>
+              </div>
+              <input type="checkbox" id="swOptMaster"><span class="switch"></span>
+            </label>
+          </div>
+
+          <div id="antiInputDetails" hidden>
+            <h3 class="group">TCP</h3>
+            <div class="card">
+              <label class="switch-row">
+                <div class="sw-text">
+                  <b>Быстрый отклик TCP</b>
+                </div>
+                <input type="checkbox" id="swTcpNoDelay" checked><span class="switch"></span>
+              </label>
+            </div>
+
+            <h3 class="group">Приоритет сети</h3>
+            <div class="card">
+              <label class="switch-row">
+                <div class="sw-text">
+                  <b>Снять сетевой троттлинг</b>
+                </div>
+                <input type="checkbox" id="swNetThrottle" checked><span class="switch"></span>
+              </label>
+            </div>
+
+            <h3 class="group">MTU</h3>
+            <div class="card">
+              <div class="field">
+                <div class="field-title">MTU</div>
+                <div class="seg" id="segMtu">
+                  <button data-v="1500" class="on">Авто (1500 MTU)</button>
+                  <button data-v="1492">PPPoE (1492 MTU)</button>
+                  <button data-v="default">Стандарт Windows</button>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="group">DNS</h3>
+            <div class="card">
+              <div class="field">
+                <div class="field-title">DNS</div>
+                <div class="seg" id="segDns">
+                  <button data-v="cloudflare" class="on">Cloudflare</button>
+                  <button data-v="google">Google</button>
+                  <button data-v="quad9">Quad9</button>
+                  <button data-v="opendns">OpenDNS</button>
+                  <button data-v="dhcp">DHCP (Провайдер)</button>
+                </div>
+              </div>
+            </div>
+
+                        <h3 class="group">Дополнительно</h3>
+            <div class="card">
+              <label class="switch-row">
+                <div class="sw-text"><b>Параметры TCP: без ECN и timestamps</b></div>
+                <input type="checkbox" id="swTcpSet" checked><span class="switch"></span>
+              </label>
+              <label class="switch-row">
+                <div class="sw-text"><b>Схема питания «Высокая производительность»</b></div>
+                <input type="checkbox" id="swPower" checked><span class="switch"></span>
+              </label>
+              <label class="switch-row">
+                <div class="sw-text"><b>Не отключать сетевой адаптер для экономии энергии</b></div>
+                <input type="checkbox" id="swNicPower" checked><span class="switch"></span>
+              </label>
+              <label class="switch-row">
+                <div class="sw-text"><b>Отключить фоновую запись игр (Game DVR)</b></div>
+                <input type="checkbox" id="swGameDvr" checked><span class="switch"></span>
+              </label>
+              <label class="switch-row">
+                <div class="sw-text"><b>Отключить раздачу обновлений другим ПК</b></div>
+                <input type="checkbox" id="swDopt" checked><span class="switch"></span>
+              </label>
+            </div>
+
+            <h3 class="group">Применить</h3>
+            <div class="card">
+              <div class="field">
+                <div class="tweak-tag mid" id="tagApplied">Не применено</div>
+                <div class="row-btns" style="margin-top:12px">
+                  <button class="btn primary" id="btnApplyTweaks">Применить в Windows</button>
+                  <button class="btn" id="btnResetTweaks">Вернуть как было</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ZAPRET -->
+      <section class="view" id="v-zapret">
+        <div class="view-head"><h1 class="dt" data-p="3" data-t="Zapret">Zapret</h1></div>
+        <div class="scroll">
+          <div class="warning-banner">
+            <svg viewBox="0 0 24 24" class="warn-ico" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke-width="2" fill="none"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg>
+            <span>Если вы не разбираетесь в настройках zapret, лучше ничего не трогать</span>
+          </div>
+
+          <h3 class="group">Игровой режим</h3>
+          <div class="card"><div class="field">
+            <div class="seg" id="segGame">
+              <button data-v="off">Выкл</button><button data-v="all">TCP + UDP</button><button data-v="tcp">TCP</button><button data-v="udp">UDP</button>
+            </div>
+            <div class="note" id="gameNote"></div>
+          </div></div>
+
+          <h3 class="group">IPSet</h3>
+          <div class="card"><div class="field">
+            <div class="seg" id="segIpset">
+              <button data-v="none">Выкл</button><button data-v="loaded">Список</button><button data-v="any">Все</button>
+            </div>
+            <div class="row-btns" style="margin-top:12px"><button class="btn" id="btnIpset">Обновить список</button></div>
+            <div class="note" id="ipsetNote" style="margin-top:8px">Фильтрация по спискам IP-адресов. В режиме «Выкл» проверка идёт только по доменам. Включение загружает подсети блокировок в память: разрешённый трафик идёт напрямую без нагрузки на процессор.</div>
+          </div></div>
+
+          <h3 class="group">Файлы</h3>
+          <div class="card">
+            <div class="field">
+              <div class="field-title">Папка</div>
+              <div class="path" id="dirPath">—</div>
+              <div class="row-btns"><button class="btn" id="btnChoose2">Изменить</button><button class="btn" id="btnOpenDir">Открыть</button></div>
+            </div>
+            <div class="field">
+              <div class="field-title">Версия <span class="ver" id="verText">—</span></div>
+              <div class="row-btns"><button class="btn" id="btnCheck">Проверить обновления</button></div>
+              <div class="note" id="updNote"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TELEGRAM -->
+      <section class="view" id="v-tg">
+        <div class="view-head"><h1 class="dt" data-p="3" data-t="Telegram">Telegram</h1></div>
+        <div class="scroll">
+          <div class="card">
+            <label class="switch-row">
+              <span class="sw-text"><b>Прокси для Telegram Desktop</b><small id="tgSub"></small></span>
+              <input type="checkbox" id="swTg"><span class="switch"></span>
+            </label>
+            <label class="switch-row" id="rowTgAuto">
+              <span class="sw-text"><b>Автозапуск прокси вместе с Windows</b></span>
+              <input type="checkbox" id="swTgAuto"><span class="switch"></span>
+            </label>
+          </div>
+          <div class="card tg-card" id="tgCard" hidden>
+            <div class="tg-addr"><span class="sdot good" id="tgDot"></span><span id="tgAddr">127.0.0.1:1443</span></div>
+            <div class="row-btns">
+              <button class="btn primary" id="btnTgOpen">Подключить в Telegram</button>
+              <button class="btn" id="btnTgCopy">Копировать ссылку</button>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="v-settings">
+        <div class="view-head"><h1 class="dt" data-p="3" data-t="Темы и настройки">Темы и настройки</h1></div>
+        <div class="scroll">
+          <h3 class="group">Оформление</h3>
+          <div class="card">
+            <div class="field">
+              <div class="field-title">Стиль</div>
+              <div class="seg grid2" id="segStyle">
+                <button data-v="material">Material You</button><button data-v="nothing">Nothing OS</button>
+                <button data-v="win11">Windows 11</button><button data-v="terminal">Терминал</button>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-title">Тема</div>
+              <div class="seg" id="segMode"><button data-v="system">Авто</button><button data-v="light">День</button><button data-v="dark">Ночь</button></div>
+            </div>
+            <label class="switch-row" id="rowTransp" hidden>
+              <span class="sw-text"><b>Прозрачность</b></span>
+              <input type="checkbox" id="swTransp"><span class="switch"></span>
+            </label>
+            <div class="field" id="accentField">
+              <div class="field-title">Цвет</div>
+              <div class="swatches" id="swatches"></div>
+            </div>
+          </div>
+
+          <h3 class="group">Автозапуск</h3>
+          <div class="card">
+            <label class="switch-row">
+              <span class="sw-text"><b>Автозапуск обхода вместе с Windows</b></span>
+              <input type="checkbox" id="swBypass"><span class="switch"></span>
+            </label>
+            <label class="switch-row">
+              <span class="sw-text"><b>Автозапуск приложения вместе с Windows</b></span>
+              <input type="checkbox" id="swApp"><span class="switch"></span>
+            </label>
+          </div>
+
+          <h3 class="group">Уведомления</h3>
+          <div class="card">
+            <label class="switch-row">
+              <span class="sw-text"><b>Уведомления о сбоях</b></span>
+              <input type="checkbox" id="swNotify"><span class="switch"></span>
+            </label>
+            <label class="switch-row">
+              <span class="sw-text"><b>Автоподбор при сбое</b></span>
+              <input type="checkbox" id="swHeal"><span class="switch"></span>
+            </label>
+          </div>
+
+          <h3 class="group">Сброс и мастер настройки</h3>
+          <div class="card">
+            <div class="field" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div class="sw-text">
+                <b>Сбросить до заводских настроек</b>
+              </div>
+              <button class="btn danger" id="btnResetDefaults">Сбросить</button>
+            </div>
+            <div class="field" style="display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--outline);margin-top:6px;padding-top:14px">
+              <div class="sw-text">
+                <b>Проверка совместимости</b>
+              </div>
+              <button class="btn" id="btnScanConf">Проверить</button>
+            </div>
+            <div class="field" style="display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--outline);margin-top:6px;padding-top:14px">
+              <div class="sw-text">
+                <b>Мастер настройки</b>
+              </div>
+              <button class="btn" id="btnRunWizard">Запустить</button>
+            </div>
+          </div>
+
+          <h3 class="group">BETA</h3>
+          <div class="card">
+            <label class="switch-row">
+              <span class="sw-text">
+                <span class="sw-label-wrap"><b>Включить экспериментальные функции</b><span class="beta-badge">BETA</span></span>
+              </span>
+              <input type="checkbox" id="swExperimental"><span class="switch"></span>
+            </label>
+          </div>
+
+          <div class="about">
+            <button class="tg-link" id="btnChannel"><svg viewBox="0 0 24 24"><path d="M21 4 3 11l5.5 2L10 19l3-3.5 4.5 3.5L21 4Z" stroke-width="2" stroke-linejoin="round" fill="none"/></svg><span>t.me/EmzProject</span></button>
+            <div class="about-sub">EmzLink 1.0</div>
+            <button class="btn danger" id="btnQuit">Выйти из приложения</button>
+          </div>
+          <h3 class="group">Источники</h3>
+          <div class="card sources">
+            <div class="src"><b>zapret-discord-youtube</b><a data-url="https://github.com/Flowseal/zapret-discord-youtube">github.com/Flowseal/zapret-discord-youtube</a></div>
+            <div class="src"><b>zapret</b><a data-url="https://github.com/bol-van/zapret">github.com/bol-van/zapret</a></div>
+            <div class="src"><b>tg-ws-proxy</b><a data-url="https://github.com/Flowseal/tg-ws-proxy">github.com/Flowseal/tg-ws-proxy</a></div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- FIRST RUN ONBOARDING SCREEN (ONLY ON FIRST RUN) -->
+  <div id="firstRunModal" class="first-run-screen" hidden>
+    <div class="first-run-winbar" data-tauri-drag-region>
+      <div class="brand-mini">
+        <svg class="logo-mini" viewBox="0 0 32 32"><path d="M13.3 8.7H4.6V23.3H13.3M18.7 8.7H27.4V23.3H18.7M13.3 8.7L18.7 23.3M13.3 23.3L18.7 8.7" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>EmzLink — Первоначальная настройка</span>
+      </div>
+      <div class="win-btns">
+        <button class="wb" id="btnMinOnboard" title="Свернуть"><svg viewBox="0 0 24 24"><path d="M5 12h14" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="wb close" id="btnCloseOnboard" title="Закрыть"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 1: PROMPT QUESTION -->
+    <div class="first-run-box" id="onboardStepPrompt">
+      <div class="onboard-hero-ico">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2 class="onboard-title">Подобрать режим?</h2>
+      <div class="onboard-time-tag">1–2 минуты</div>
+      <p class="onboard-desc">Проверим все режимы на YouTube и Discord и выберем лучший.</p>
+      <div class="onboard-actions">
+        <button class="btn primary onboard-btn-main" id="btnOnboardStart">Да, подобрать</button>
+        <button class="btn onboard-btn-sub" id="btnOnboardSkip">Пропустить</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: ACTIVE TESTING WITH PROGRESS & FACTS -->
+    <div class="first-run-box" id="onboardStepTesting" hidden>
+      <div class="onboard-status-badge">Тестирование режимов</div>
+      <div class="onboard-live-alt" id="onboardLiveAlt">
+        <span class="live-name">Подготовка…</span>
+        <span class="live-ping"></span>
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div class="onboard-prog-track">
+        <div class="onboard-prog-fill" id="onboardProgFill" style="width: 0%;"></div>
+      </div>
+      <div class="onboard-prog-meta">
+        <span id="onboardProgCount">0 / 0</span>
+        <span id="onboardProgPercent">0%</span>
+      </div>
+
+      <div class="onboard-actions">
+        <button class="btn onboard-btn-sub" id="btnOnboardCancel">Остановить и войти</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: DONE / RESULT -->
+    <div class="first-run-box" id="onboardStepDone" hidden>
+      <div class="onboard-hero-ico success">
+        <svg viewBox="0 0 24 24" class="check-svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M7 12.5l3.5 3.5 7-7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="onboard-title">Режим подобран</h2>
+      <div class="onboard-best-pill" id="onboardBestPill"></div>
+      <div class="onboard-actions">
+        <button class="btn primary onboard-btn-main" id="btnOnboardFinish">Начать пользоваться</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- COMPATIBILITY CHECK: another zapret / TgWsProxy is already installed or running -->
+  <div id="conflictModal" class="first-run-screen conflict-screen" hidden>
+    <div class="first-run-winbar" data-tauri-drag-region>
+      <div class="brand-mini" data-tauri-drag-region>
+        <svg class="logo-mini" viewBox="0 0 32 32"><path d="M13.3 8.7H4.6V23.3H13.3M18.7 8.7H27.4V23.3H18.7M13.3 8.7L18.7 23.3M13.3 23.3L18.7 8.7" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>EmzLink — Проверка совместимости</span>
+      </div>
+    </div>
+    <div class="first-run-box conflict-box">
+      <div class="onboard-hero-ico conflict-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.2v5.6"/><path d="M12 16.6h.01"/></svg>
+      </div>
+      <h2 class="onboard-title">Найдены конфликты</h2>
+      <p class="onboard-desc">Найденное мешает работе обхода. EmzLink отключит это и уберёт автозапуск.</p>
+      <div class="conf-list" id="confList"></div>
+      <label class="conf-opt"><input type="checkbox" id="confMigrate" checked><span>Перенести мои списки сайтов и игровой режим</span></label>
+      <label class="conf-opt" id="confRemoveRow" hidden><input type="checkbox" id="confRemove"><span>Удалить найденные старые папки: <b id="confRemovePath"></b></span></label>
+      <div class="onboard-actions">
+        <button class="btn primary onboard-btn-main" id="btnConfFix">Отключить и продолжить</button>
+        <button class="btn onboard-btn-sub" id="btnConfSkip">Не сейчас</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+</div>
+<script src="app.js"></script>
+<script src="fx.js"></script>
+</body>
+</html>

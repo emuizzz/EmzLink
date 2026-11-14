@@ -1,0 +1,15 @@
+# build output
+source/src-tauri/target/
+installer/Output/
+dist/
+*.zip
+
+# the exe is published in Releases, not committed
+EmzLink.exe
+
+# local state
+tgproxy/
+*.bad
+*.tmp
+Thumbs.db
+.DS_Store
